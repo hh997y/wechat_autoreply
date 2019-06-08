@@ -16,3 +16,7 @@
 ## 文件说明
     autoresponse.py：主要代码
     city_dict.py：天气查询城市对应编码
+## 参考
+    https://github.com/sfyc23/EverydayWechat
+    https://blog.csdn.net/coder_pig/article/details/81357810
+    https://blog.csdn.net/Lynn_coder/article/details/79436539

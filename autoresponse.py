@@ -3,11 +3,14 @@ import datetime
 import requests
 import city_dict
 
-global t,name
+global t, name
 t = 0
+
+#输入自动回复对象的微信备注名称，一次仅能一人
 print("请输入要自动回复对象的备注名（一个对象）：")
 name = input()
 
+#获取日期信息
 nowdate = datetime.datetime.now().strftime('%Y-%m-%d %A')
 
 def isJson(resp):
@@ -17,6 +20,7 @@ def isJson(resp):
     except:
         return False
 
+#获取天气信息
 def get_weather_info(city_code):
     weather_url = f'http://t.weather.sojson.com/api/weather/city/{city_code}'
     resp = requests.get(url=weather_url)
@@ -40,6 +44,7 @@ def get_weather_info(city_code):
         today_msg = f'{tianqi}\n{temperature}\n{aqi}\n'
         return today_msg
 
+#图灵机器人接口
 def robot(info):
     #info = msg['Content'].encode('utf8')
     # 图灵API接口
@@ -68,6 +73,7 @@ def robot(info):
     # 提取text，发送给发信息的人
     return result['results'][0]['values']['text']
 
+#自动回复程序
 @itchat.msg_register([itchat.content.TEXT,itchat.content.PICTURE])
 def reply_msg(msg):
     global t,name
