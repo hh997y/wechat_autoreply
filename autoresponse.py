@@ -3,8 +3,10 @@ import datetime
 import requests
 import city_dict
 
-global t
+global t,name
 t = 0
+print("请输入要自动回复对象的备注名（一个对象）：")
+name = input()
 
 nowdate = datetime.datetime.now().strftime('%Y-%m-%d %A')
 
@@ -68,27 +70,29 @@ def robot(info):
 
 @itchat.msg_register([itchat.content.TEXT,itchat.content.PICTURE])
 def reply_msg(msg):
-    global t
+    global t,name
     userName = msg['User']['UserName']
     if t == 2:
-        if msg['Content'] == "退出":
-            itchat.send("机器人已退出", toUserName=userName)
-            t = 0
-        else:
-            text = msg['Content']
-            rep = robot(text)
-            itchat.send(rep+"\n回复“退出”，退出机器人聊天", toUserName=userName)
+        if msg['User']['RemarkName'] == name:
+            if msg['Content'] == "退出":
+                itchat.send("机器人已退出", toUserName=userName)
+                t = 0
+            else:
+                text = msg['Content']
+                rep = robot(text)
+                itchat.send(rep+"\n回复“退出”，退出机器人聊天", toUserName=userName)
     elif t == 1:
-        ctn = msg['Content']
-        if ctn in city_dict.city_dict:
-            city_code = city_dict.city_dict[ctn]
-            wheather = get_weather_info(city_code)
-            itchat.send(wheather, toUserName=userName)
-        else:
-            itchat.send("无法获取您输入的城市信息", toUserName=userName)
+        if msg['User']['RemarkName'] == name:
+            ctn = msg['Content']
+            if ctn in city_dict.city_dict:
+                city_code = city_dict.city_dict[ctn]
+                wheather = get_weather_info(city_code)
+                itchat.send(wheather, toUserName=userName)
+            else:
+                itchat.send("无法获取您输入的城市信息", toUserName=userName)
         t = 0
     else:
-        if msg['User']['RemarkName'] == "我自己*":
+        if msg['User']['RemarkName'] == name:
             if msg['Content'] == '你好':
                 itchat.send('你好', toUserName=userName)
             elif msg['Content'] == '天气':
@@ -100,7 +104,7 @@ def reply_msg(msg):
                 itchat.send('你好，我是人工智障', toUserName=userName)
                 t = 2
             else:
-                itchat.send('正忙，自动消息\n回复“日期”，获取日期\n回复“天气”，获取天气\n回复“聊天”，开始和机器人聊天', toUserName=userName)
+                itchat.send('还没起床，自动消息\n回复“日期”，获取日期\n回复“天气”，获取天气\n回复“聊天”，开始和机器人聊天', toUserName=userName)
 
 if __name__ == '__main__':
     itchat.auto_login(hotReload=True)
