@@ -3,12 +3,16 @@ import datetime
 import requests
 import city_dict
 
-global t, name
+global t, name, rtext
 t = 0
 
 #输入自动回复对象的微信备注名称，一次仅能一人
 print("请输入要自动回复对象的备注名（一个对象）：")
 name = input()
+
+#输入自动回复的内容
+print("请输入自动回复内容：")
+rtext = input()
 
 #获取日期信息
 nowdate = datetime.datetime.now().strftime('%Y-%m-%d %A')
@@ -76,7 +80,7 @@ def robot(info):
 #自动回复程序
 @itchat.msg_register([itchat.content.TEXT,itchat.content.PICTURE])
 def reply_msg(msg):
-    global t,name
+    global t, name, rtext
     userName = msg['User']['UserName']
     if t == 2:
         if msg['User']['RemarkName'] == name:
@@ -110,7 +114,7 @@ def reply_msg(msg):
                 itchat.send('你好，我是人工智障', toUserName=userName)
                 t = 2
             else:
-                itchat.send('还没起床，自动消息\n回复“日期”，获取日期\n回复“天气”，获取天气\n回复“聊天”，开始和机器人聊天', toUserName=userName)
+                itchat.send(rtext + '，自动消息\n回复“日期”，获取日期\n回复“天气”，获取天气\n回复“聊天”，开始和机器人聊天', toUserName=userName)
 
 if __name__ == '__main__':
     itchat.auto_login(hotReload=True)
