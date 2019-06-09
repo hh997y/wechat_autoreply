@@ -62,8 +62,8 @@ def robot(info):
             }
         },
         "userInfo": {
-            "apiKey": "fa58083cc686409788e27a2888399b71",
-            "userId": "457871"
+            "apiKey": "XXX......XXX",
+            "userId": "XXXXXX"
         }
     }
     headers = {
